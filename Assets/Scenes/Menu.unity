@@ -1535,7 +1535,7 @@ GameObject:
   - component: {fileID: 790231100}
   - component: {fileID: 790231099}
   m_Layer: 5
-  m_Name: LobbyNameText
+  m_Name: LobbyNameTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2260,7 +2260,7 @@ GameObject:
   - component: {fileID: 1131839485}
   - component: {fileID: 1131839484}
   m_Layer: 5
-  m_Name: LobbyName
+  m_Name: LobbyNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2305,9 +2305,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '31
-
-'
+  m_text: LobbyName
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
@@ -3249,7 +3247,7 @@ MonoBehaviour:
   _createRoomButton: {fileID: 404526112}
   _joinRoomButton: {fileID: 1240534832}
   _playerListText: {fileID: 1095898499}
-  _lobyNameText: {fileID: 1131839484}
+  _lobbyNameText: {fileID: 1131839484}
   _startGameButton: {fileID: 1847376683}
 --- !u!4 &1492390975
 Transform:
