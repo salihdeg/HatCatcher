@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using Managers;
 
 namespace Controllers
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     {
         [HideInInspector] public int id;
 
@@ -15,7 +16,7 @@ namespace Controllers
         [SerializeField] private float _jumpForce;
         [SerializeField] private GameObject _hatObject;
 
-        [HideInInspector] public float _currentHatTime;
+        public float _currentHatTime;
 
         [Header("Components")]
         private Rigidbody _rigidbody;
@@ -28,10 +29,42 @@ namespace Controllers
 
         private void Update()
         {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                if (_currentHatTime >= GameManager.Instance.timeToWin && !GameManager.Instance.gameEnd)
+                {
+                    GameManager.Instance.gameEnd = true;
+                    GameManager.Instance.photonView.RPC("WinGame", RpcTarget.All, id);
+                }
+            }
+
+            if (!photonView.IsMine)
+                return;
+
             Move();
 
             if (Input.GetKeyDown(KeyCode.Space))
                 TryJump();
+
+            if (_hatObject.activeInHierarchy)
+                _currentHatTime += Time.deltaTime;
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (!photonView.IsMine)
+                return;
+
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                if (GameManager.Instance.GetPlayer(collision.gameObject).id == GameManager.Instance.playerIdWithHat)
+                {
+                    if (GameManager.Instance.CanGetHat())
+                    {
+                        GameManager.Instance.photonView.RPC("GiveHat", RpcTarget.All, id, false);
+                    }
+                }
+            }
         }
 
         private void Move()
@@ -52,5 +85,40 @@ namespace Controllers
             }
         }
 
+        public void SetHat(bool hasHat)
+        {
+            _hatObject.SetActive(hasHat);
+        }
+
+        [PunRPC]
+        public void Initialize(Player player)
+        {
+            _photonPlayer = player;
+            id = player.ActorNumber;
+            GameManager.Instance.players[id - 1] = this;
+
+            if (id == 1)
+            {
+                GameManager.Instance.GiveHat(id, true);
+            }
+
+
+            if (!photonView.IsMine)
+            {
+                _rigidbody.isKinematic = true;
+            }
+        }
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            if (stream.IsWriting)
+            {
+                stream.SendNext(_currentHatTime);
+            }
+            else if (stream.IsReading)
+            {
+                _currentHatTime = (float)stream.ReceiveNext();
+            }
+        }
     }
 }
