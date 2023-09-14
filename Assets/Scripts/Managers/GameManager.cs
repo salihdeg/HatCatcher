@@ -84,6 +84,7 @@ namespace Managers
         {
             PhotonNetwork.LeaveRoom();
             NetworkManager.Instance.ChangeScene(0);
+            Destroy(NetworkManager.Instance.gameObject);
         }
 
         public bool CanGetHat()

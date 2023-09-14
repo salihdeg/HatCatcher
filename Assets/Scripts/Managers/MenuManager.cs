@@ -22,6 +22,7 @@ namespace Managers
 
         [Header("Lobby Screen")]
         [SerializeField] private TextMeshProUGUI _playerListText;
+        [SerializeField] private TextMeshProUGUI _lobbyNameText;
         [SerializeField] private Button _startGameButton;
 
 
@@ -42,9 +43,11 @@ namespace Managers
         {
             ChangeLoginScreenButtonsStatus(true);
         }
+
         public override void OnJoinedRoom()
         {
             SetScreen(_lobbyScreen);
+            _lobbyNameText.text = PhotonNetwork.CurrentRoom.Name;
             photonView.RPC("UpdateLobbyPlayersText", RpcTarget.All);
         }
 
@@ -81,6 +84,11 @@ namespace Managers
         public void OnStartGameButton()
         {
             NetworkManager.Instance.photonView.RPC("ChangeScene", RpcTarget.All, 1);
+        }
+
+        public void Reconnect()
+        {
+            PhotonNetwork.ConnectUsingSettings();
         }
 
         public void OnLeaveRoomButton()

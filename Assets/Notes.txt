@@ -1,0 +1,5 @@
+Menu:
+	NetworkManager - 1
+	MenuManager - 2
+Game:
+	GameManager - 3
