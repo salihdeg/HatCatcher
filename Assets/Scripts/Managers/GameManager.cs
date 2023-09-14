@@ -73,6 +73,8 @@ namespace Managers
 
             PlayerController player = GetPlayer(playerId);
 
+            GameUIManager.Instance.SetWinText(player.photonPlayer.NickName);
+
             Invoke("BackToMenu", 3f);
         }
 
