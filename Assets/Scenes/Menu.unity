@@ -1931,7 +1931,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_TargetDisplay: 0
 --- !u!224 &1120534992
 RectTransform:
@@ -2534,6 +2534,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c3c139423fe8f848a6e723cbe38c1a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _loginScreen: {fileID: 486968800}
+  _lobbyScreen: {fileID: 2105955727}
+  _createRoomButton: {fileID: 404526112}
+  _joinRoomButton: {fileID: 1240534832}
+  _playerListText: {fileID: 1095898499}
+  _startGameButton: {fileID: 1847376683}
 --- !u!4 &1492390975
 Transform:
   m_ObjectHideFlags: 0
