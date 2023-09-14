@@ -320,9 +320,10 @@ MonoBehaviour:
   prefixField: -1
   Synchronization: 3
   OwnershipTransfer: 0
-  observableSearch: 2
+  observableSearch: 0
   ObservedComponents:
   - {fileID: 7966206175866833902}
+  - {fileID: 6231479626065817925}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -358,7 +359,7 @@ MonoBehaviour:
   _moveSpeed: 5
   _jumpForce: 7
   _hatObject: {fileID: 5239311480756094583}
-  _currentHatTime: 0
+  currentHatTime: 0
 --- !u!1 &4540185550637030003
 GameObject:
   m_ObjectHideFlags: 0
