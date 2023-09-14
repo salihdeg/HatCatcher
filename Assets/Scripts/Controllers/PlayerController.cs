@@ -16,11 +16,11 @@ namespace Controllers
         [SerializeField] private float _jumpForce;
         [SerializeField] private GameObject _hatObject;
 
-        public float _currentHatTime;
+        [HideInInspector] public float currentHatTime;
 
         [Header("Components")]
         private Rigidbody _rigidbody;
-        private Player _photonPlayer;
+        public Player photonPlayer;
 
         private void Awake()
         {
@@ -31,7 +31,7 @@ namespace Controllers
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                if (_currentHatTime >= GameManager.Instance.timeToWin && !GameManager.Instance.gameEnd)
+                if (currentHatTime >= GameManager.Instance.timeToWin && !GameManager.Instance.gameEnd)
                 {
                     GameManager.Instance.gameEnd = true;
                     GameManager.Instance.photonView.RPC("WinGame", RpcTarget.All, id);
@@ -47,7 +47,7 @@ namespace Controllers
                 TryJump();
 
             if (_hatObject.activeInHierarchy)
-                _currentHatTime += Time.deltaTime;
+                currentHatTime += Time.deltaTime;
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -93,7 +93,7 @@ namespace Controllers
         [PunRPC]
         public void Initialize(Player player)
         {
-            _photonPlayer = player;
+            photonPlayer = player;
             id = player.ActorNumber;
             GameManager.Instance.players[id - 1] = this;
 
@@ -113,11 +113,11 @@ namespace Controllers
         {
             if (stream.IsWriting)
             {
-                stream.SendNext(_currentHatTime);
+                stream.SendNext(currentHatTime);
             }
             else if (stream.IsReading)
             {
-                _currentHatTime = (float)stream.ReceiveNext();
+                currentHatTime = (float)stream.ReceiveNext();
             }
         }
     }
