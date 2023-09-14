@@ -359,6 +359,7 @@ MonoBehaviour:
   _moveSpeed: 5
   _jumpForce: 7
   _hatObject: {fileID: 5239311480756094583}
+  _playerSelfMat: {fileID: 2100000, guid: 0868d555852766f46bb08d5609592cc5, type: 2}
   currentHatTime: 0
 --- !u!1 &4540185550637030003
 GameObject:

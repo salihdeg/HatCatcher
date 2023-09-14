@@ -15,6 +15,7 @@ namespace Controllers
         [SerializeField] private float _moveSpeed;
         [SerializeField] private float _jumpForce;
         [SerializeField] private GameObject _hatObject;
+        [SerializeField] private Material _playerSelfMat;
 
         [HideInInspector] public float currentHatTime;
 
@@ -25,6 +26,12 @@ namespace Controllers
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
+        }
+
+        private void Start()
+        {
+            if (photonView.IsMine)
+                GetComponent<MeshRenderer>().material = _playerSelfMat;
         }
 
         private void Update()
