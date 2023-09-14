@@ -19,7 +19,7 @@ namespace Managers
         [Header("Login Screen")]
         [SerializeField] private Button _createRoomButton;
         [SerializeField] private Button _joinRoomButton;
-        
+
         [Header("Lobby Screen")]
         [SerializeField] private TextMeshProUGUI _playerListText;
         [SerializeField] private Button _startGameButton;
@@ -36,10 +36,24 @@ namespace Managers
             _joinRoomButton.interactable = status;
         }
 
+        #region Photon Callbacks
+
         public override void OnConnectedToMaster()
         {
             ChangeLoginScreenButtonsStatus(true);
         }
+        public override void OnJoinedRoom()
+        {
+            SetScreen(_lobbyScreen);
+            photonView.RPC("UpdateLobbyPlayersText", RpcTarget.All);
+        }
+
+        public override void OnPlayerLeftRoom(Player otherPlayer)
+        {
+            UpdateLobbyPlayersText();
+        }
+
+        #endregion
 
         public void SetScreen(GameObject screen)
         {
@@ -57,6 +71,40 @@ namespace Managers
         public void OnJoinRoomButton(TMP_InputField roomNameInput)
         {
             NetworkManager.Instance.JoinRoom(roomNameInput.text);
+        }
+
+        public void OnPlayerNameUpdate(TMP_InputField playerNameInput)
+        {
+            PhotonNetwork.NickName = playerNameInput.text;
+        }
+
+        public void OnStartGameButton()
+        {
+            NetworkManager.Instance.photonView.RPC("ChangeScene", RpcTarget.All, 1);
+        }
+
+        public void OnLeaveRoomButton()
+        {
+            PhotonNetwork.LeaveRoom();
+            SetScreen(_loginScreen);
+        }
+
+        [PunRPC]
+        public void UpdateLobbyPlayersText()
+        {
+            _playerListText.text = string.Empty;
+
+            //List All Players
+            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+            {
+                _playerListText.text += PhotonNetwork.PlayerList[i].NickName + "\n";
+            }
+
+            //Enable start button if player is lobby owner
+            if (PhotonNetwork.IsMasterClient)
+                _startGameButton.interactable = true;
+            else
+                _startGameButton.interactable = false;
         }
     }
 }
