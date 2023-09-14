@@ -28,6 +28,8 @@ namespace Managers
 
         private void Start()
         {
+            if (_loadingCanvas != null)
+                _loadingCanvas.SetActive(true);
             Connect();
         }
 
@@ -54,6 +56,7 @@ namespace Managers
             PhotonNetwork.JoinRoom(roomName);
         }
 
+        [PunRPC]
         public void ChangeScene(int sceneIndex)
         {
             PhotonNetwork.LoadLevel(sceneIndex);
@@ -64,14 +67,13 @@ namespace Managers
         public override void OnConnectedToMaster()
         {
             Debug.Log("Connected To Master Server!");
-            _connectTask.SetResult(true);
+            if (_connectTask != null) _connectTask.SetResult(true);
         }
 
         public override void OnDisconnected(DisconnectCause cause)
         {
             Debug.Log("Disconnected!");
-            if (_connectTask != null)
-                _connectTask.SetResult(false);
+            if (_connectTask != null) _connectTask.SetResult(false);
         }
 
         public override void OnCreatedRoom()
